@@ -13,4 +13,5 @@ Mark each item `[x]` (done) or write `N/A — <reason>` next to it. Item 1 can n
 - [ ] **7. Internal testing** — reviewer has actually exercised the change (read the doc end-to-end / filled out the changed form / run the notebook) before approving.
 
 ## Reviewer routing (author's judgment — no automated routing)
-<!-- If this PR needs SME, R&E, or regulation-team input, name them here and note how their sign-off was captured (link to Slack thread / email / doc). -->
+<!-- Required if item 4 or 5 above is checked: name who reviewed it (SME / R&E / regulation team) and how their sign-off was captured (link to Slack thread / email / doc). Write your answer inside the quote block below — text outside it is ignored by the automated check. -->
+> 
