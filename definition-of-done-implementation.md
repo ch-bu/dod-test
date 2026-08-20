@@ -54,6 +54,21 @@ This is the concrete mechanism for item 1 ("committed... reviewed and approved")
 
 > **Branch protection on personal free-plan repos:** GitHub blocks branch protection for private repos on free personal accounts ("Upgrade to GitHub Pro or make this repository public"). `aai-institute` is on the Team plan, where this works natively regardless of repo visibility — confirmed via `gh api orgs/aai-institute`. Not a concern for the real rollout.
 
+### 0.4 CLAUDE.md (guards PR creation done via an AI agent)
+Add a `CLAUDE.md` to both repos:
+
+```markdown
+# CLAUDE.md
+
+## Creating pull requests
+
+Before running `gh pr create`, read `.github/PULL_REQUEST_TEMPLATE.md` and build `--body-file` from it: keep every checklist item, mark each one `[x]` or `N/A — <reason>` based on the actual change, and — when item 4 or 5 is checked — put the SME/R&E/regulation sign-off inside a `>` blockquote (or a fenced code block) under "Reviewer routing"; text outside a quote/fence there doesn't count toward `dod-check`.
+
+`--fill`/`--fill-first` and a hand-written `--body` both skip the template entirely. Never use them in this repo.
+```
+
+This exists because of a real failure caught in testing: an AI coding agent (or a human) creating a PR with `gh pr create --body "..."` or `--fill` silently skips the repository's PR template, since GitHub only auto-populates the template when no explicit body is passed. `dod-check` still catches the resulting missing checklist and blocks the merge — so this isn't a hole in enforcement — but it wastes a round trip fixing something that never needed to go wrong. `CLAUDE.md` is read automatically by Claude Code at the start of a session in that repo, so this instruction applies without anyone having to remember it.
+
 ---
 
 ## 1. Commit & review
@@ -149,6 +164,7 @@ This is the concrete mechanism for item 1 ("committed... reviewed and approved")
 - [ ] Add `.github/workflows/auto-label.yml` — auto-applies label from PR title prefix (§0.2)
 - [ ] Add `.github/workflows/dod-check.yml` hard-enforcement Action (§0.3)
 - [ ] Add `.github/release.yml` label-to-category mapping (§1)
+- [ ] Add `CLAUDE.md` with PR-creation instructions, so an AI agent always sources the PR body from the template (§0.4)
 - [ ] Create labels: `feature`, `fix`, `docs`, `chore` (targets for auto-labeling, not for manual picking)
 - [ ] Enable branch protection on `main`: require PR + 1 approval + the auto-label and DoD status checks; disallow direct pushes
 - [ ] Agree who cuts the sprint-end release (`gh release create --generate-notes`) and confirm the (~2-week, Thu/Fri-ish) cadence with the team
