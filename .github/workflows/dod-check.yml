@@ -50,6 +50,15 @@ jobs:
               errors.push(`PR title must start with one of feat:, fix:, docs:, chore: so it can be categorized (got "${title}").`);
             }
 
+            const routingMatch = body.match(/##\s*Reviewer routing[^\n]*\n([\s\S]*?)(?:\n##\s|$)/i);
+            const routingText = (routingMatch ? routingMatch[1] : '')
+              .replace(/<!--[\s\S]*?-->/g, '')
+              .trim();
+            const needsRouting = ['4', '5'].filter(i => found[i]?.checked);
+            if (needsRouting.length && !routingText) {
+              errors.push(`Item(s) ${needsRouting.join(', ')} are checked as done, but "Reviewer routing" is empty — name who reviewed it and how their sign-off was captured.`);
+            }
+
             if (errors.length) {
               core.setFailed('Definition of Done check failed:\n- ' + errors.join('\n- '));
             }

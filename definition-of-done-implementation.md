@@ -41,13 +41,16 @@ Add `.github/workflows/dod-check.yml` to both repos. On every `pull_request` (op
 1. Parses the PR body and fails if any of the 7 checklist lines is neither `[x]` nor contains `N/A`.
 2. Fails if item 1's line is not `[x]` (i.e., rejects `N/A` on item 1).
 3. Re-validates the title prefix itself (`feat:`/`fix:`/`docs:`/`chore:`) — deliberately *not* by checking whether the label was actually applied. Tested this: `dod-check` and `auto-label` fire off the same `pull_request` event and can run in either order, and GitHub does not re-trigger a workflow off events caused by the default `GITHUB_TOKEN` — so a "label was added" trigger chain is unreliable. Re-checking the same regex independently avoids the dependency entirely.
+4. Fails if item 4 or item 5 is checked `[x]` but the "Reviewer routing" section is empty (only the placeholder HTML comment, or nothing). Caught in testing: a PR author could check "reviewed by an SME" done without naming anyone, since there was nothing tying the checkbox to actual evidence. This doesn't verify the sign-off is *genuine* — it can't — but it stops the specific case of claiming the work happened while leaving zero trace of who did it.
 
 Mark this check **required** in branch protection for `main` (Settings → Branches → Branch protection rule → "Require status checks to pass"), alongside:
 - Require a pull request before merging.
 - Require at least 1 approval.
 - No direct pushes to `main`.
 
-This is the concrete mechanism for item 1 ("committed... reviewed and approved") and the blank-checklist guard for the rest — everything else remains a human judgment call the Action can't verify (whether the review was any good), only that it was *not skipped*.
+This is the concrete mechanism for item 1 ("committed... reviewed and approved") and the blank-checklist/blank-routing guard for the rest — everything else remains a human judgment call the Action can't verify (whether the review was any good), only that it was *not skipped or silently claimed*.
+
+> **Branch protection on personal free-plan repos:** GitHub blocks branch protection for private repos on free personal accounts ("Upgrade to GitHub Pro or make this repository public"). `aai-institute` is on the Team plan, where this works natively regardless of repo visibility — confirmed via `gh api orgs/aai-institute`. Not a concern for the real rollout.
 
 ---
 
