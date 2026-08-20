@@ -51,12 +51,22 @@ jobs:
             }
 
             const routingMatch = body.match(/##\s*Reviewer routing[^\n]*\n([\s\S]*?)(?:\n##\s|$)/i);
-            const routingText = (routingMatch ? routingMatch[1] : '')
-              .replace(/<!--[\s\S]*?-->/g, '')
+            const routingSection = routingMatch ? routingMatch[1] : '';
+
+            const fenceMatch = routingSection.match(/```[^\n]*\n([\s\S]*?)```/);
+            const fenceText = fenceMatch ? fenceMatch[1].trim() : '';
+
+            const quoteText = routingSection
+              .split('\n')
+              .filter(l => /^>/.test(l.trim()))
+              .map(l => l.trim().replace(/^>\s?/, ''))
+              .join('\n')
               .trim();
+
+            const routingText = fenceText || quoteText;
             const needsRouting = ['4', '5'].filter(i => found[i]?.checked);
             if (needsRouting.length && !routingText) {
-              errors.push(`Item(s) ${needsRouting.join(', ')} are checked as done, but "Reviewer routing" is empty — name who reviewed it and how their sign-off was captured.`);
+              errors.push(`Item(s) ${needsRouting.join(', ')} are checked as done, but "Reviewer routing" has no answer inside a blockquote (\`> ...\`) or a fenced code block — name who reviewed it and how their sign-off was captured, written inside the quote/fence.`);
             }
 
             if (errors.length) {

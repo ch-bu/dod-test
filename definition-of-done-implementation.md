@@ -27,7 +27,8 @@ Mark each item `[x]` (done) or write `N/A — <reason>` next to it. Item 1 can n
 - [ ] **7. Internal testing** — reviewer has actually exercised the change (read the doc end-to-end / filled out the changed form / run the notebook) before approving.
 
 ## Reviewer routing (author's judgment — no automated routing)
-<!-- If this PR needs SME, R&E, or regulation-team input, name them here and note how their sign-off was captured (link to Slack thread / email / doc). -->
+<!-- Required if item 4 or 5 above is checked: name who reviewed it (SME / R&E / regulation team) and how their sign-off was captured (link to Slack thread / email / doc). Write your answer inside the quote block below — text outside it is ignored by the automated check. -->
+> 
 ```
 
 ### 0.2 Auto-labeling (GitHub Action, not a manual step)
@@ -42,6 +43,7 @@ Add `.github/workflows/dod-check.yml` to both repos. On every `pull_request` (op
 2. Fails if item 1's line is not `[x]` (i.e., rejects `N/A` on item 1).
 3. Re-validates the title prefix itself (`feat:`/`fix:`/`docs:`/`chore:`) — deliberately *not* by checking whether the label was actually applied. Tested this: `dod-check` and `auto-label` fire off the same `pull_request` event and can run in either order, and GitHub does not re-trigger a workflow off events caused by the default `GITHUB_TOKEN` — so a "label was added" trigger chain is unreliable. Re-checking the same regex independently avoids the dependency entirely.
 4. Fails if item 4 or item 5 is checked `[x]` but the "Reviewer routing" section is empty (only the placeholder HTML comment, or nothing). Caught in testing: a PR author could check "reviewed by an SME" done without naming anyone, since there was nothing tying the checkbox to actual evidence. This doesn't verify the sign-off is *genuine* — it can't — but it stops the specific case of claiming the work happened while leaving zero trace of who did it.
+5. Only counts text written inside a blockquote (`> ...`) or a fenced code block (` ``` `) within the routing section as the actual answer — plain prose typed elsewhere in that section, or unrelated content someone adds further down the PR body, is ignored. Otherwise "everything until the next `##` heading" is too loose a boundary: it's ambiguous whether trailing content belongs to the answer or not, and the check would treat any stray text as satisfying the requirement without the author actually answering it.
 
 Mark this check **required** in branch protection for `main` (Settings → Branches → Branch protection rule → "Require status checks to pass"), alongside:
 - Require a pull request before merging.
