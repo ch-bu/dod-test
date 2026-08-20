@@ -40,7 +40,7 @@ Add `.github/workflows/dod-check.yml` to both repos. On every `pull_request` (op
 
 1. Parses the PR body and fails if any of the 7 checklist lines is neither `[x]` nor contains `N/A`.
 2. Fails if item 1's line is not `[x]` (i.e., rejects `N/A` on item 1).
-3. Confirms the auto-labeling step (§0.2) succeeded — if it didn't, this check fails too, since a missing label means the title prefix was invalid.
+3. Re-validates the title prefix itself (`feat:`/`fix:`/`docs:`/`chore:`) — deliberately *not* by checking whether the label was actually applied. Tested this: `dod-check` and `auto-label` fire off the same `pull_request` event and can run in either order, and GitHub does not re-trigger a workflow off events caused by the default `GITHUB_TOKEN` — so a "label was added" trigger chain is unreliable. Re-checking the same regex independently avoids the dependency entirely.
 
 Mark this check **required** in branch protection for `main` (Settings → Branches → Branch protection rule → "Require status checks to pass"), alongside:
 - Require a pull request before merging.

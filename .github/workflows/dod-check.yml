@@ -2,7 +2,7 @@ name: Definition of Done Check
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, labeled, unlabeled]
+    types: [opened, edited, synchronize]
 
 permissions:
   pull-requests: read
@@ -45,10 +45,9 @@ jobs:
               }
             }
 
-            const categoryLabels = ['feature', 'fix', 'docs', 'chore'];
-            const labels = context.payload.pull_request.labels.map(l => l.name);
-            if (!labels.some(l => categoryLabels.includes(l))) {
-              errors.push('No category label (feature/fix/docs/chore) applied — check that the PR title has a valid feat:/fix:/docs:/chore: prefix so auto-labeling can run.');
+            const title = context.payload.pull_request.title;
+            if (!/^(feat|fix|docs|chore)(\([^)]*\))?:/.test(title)) {
+              errors.push(`PR title must start with one of feat:, fix:, docs:, chore: so it can be categorized (got "${title}").`);
             }
 
             if (errors.length) {
