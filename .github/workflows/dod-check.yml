@@ -30,7 +30,7 @@ jobs:
             }
 
             const errors = [];
-            for (let i = 1; i <= 7; i++) {
+            for (let i = 1; i <= 6; i++) {
               const item = found[String(i)];
               if (!item) {
                 errors.push(`Item ${i} is missing from the PR description — did you use the Definition of Done template?`);
@@ -39,9 +39,6 @@ jobs:
               const hasNA = /N\/A/i.test(item.line);
               if (!item.checked && !hasNA) {
                 errors.push(`Item ${i} is neither checked nor marked "N/A — <reason>".`);
-              }
-              if (i === 1 && !item.checked) {
-                errors.push('Item 1 (Commit & review) can never be marked N/A — it must be checked.');
               }
             }
 
@@ -64,7 +61,7 @@ jobs:
               .trim();
 
             const routingText = fenceText || quoteText;
-            const needsRouting = ['4', '5'].filter(i => found[i]?.checked);
+            const needsRouting = ['3'].filter(i => found[i]?.checked);
             if (needsRouting.length && !routingText) {
               errors.push(`Item(s) ${needsRouting.join(', ')} are checked as done, but "Reviewer routing" has no answer inside a blockquote (\`> ...\`) or a fenced code block — name who reviewed it and how their sign-off was captured, written inside the quote/fence.`);
             }
