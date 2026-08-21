@@ -2,16 +2,15 @@
 <!-- what changed and why -->
 
 ## Definition of Done
-Mark each item `[x]` (done) or write `N/A — <reason>` next to it. Item 1 can never be N/A.
+Mark each item `[x]` (done) or write `N/A — <reason>` next to it.
 
-- [ ] **1. Commit & review** — committed with a clear PR title (used as the changelog entry), reviewed and approved by a teammate.
-- [ ] **2. Human oversight** — any AI-generated/AI-assisted content checked by a human with topic knowledge, including language quality. *(Policy Art. 4.4)*
-- [ ] **3. Transparency** — user-facing synthetic text/image/audio/video labeled "Created with the help of AI". *(Policy Art. 4.3)*
-- [ ] **4. EU AI Act & Trustworthy AI compliance** — confirmed thoughtful/sustainable AI use (model choice, token use) and non-discrimination/accessibility; regulation-team sign-off obtained if this is a non-standard case.
-- [ ] **5. Subject matter / technical expert review** — reviewed by a subject matter expert where domain knowledge was needed; technical feasibility/best practice confirmed by the R&E team for technical items.
-- [ ] **6. Data handling** — personal data (if any) collected/stored responsibly, access limited to those who need it. *(Policy Art. 4.8, GDPR)*
-- [ ] **7. Internal testing** — reviewer has actually exercised the change (read the doc end-to-end / filled out the changed form / run the notebook) before approving.
+- [ ] **1. Human oversight** — All AI-generated content has been checked by a human with topic knowledge.
+- [ ] **2. Transparency** — User-facing synthetic text, images, audio and video have been correctly labeled.
+- [ ] **3. Expert input** — Where additional domain expertise is needed (eg. technical or regulatory), at least one team member from the relevant team has reviewed the work.
+- [ ] **4. Language norms [until automated]** — Language uses UK spelling for English, "Du" form for German, and terminology is in line with our Institute Glossary.
+- [ ] **5. Data handling** — No personal data is contained in the PR.
+- [ ] **6. Internal testing** — The deliverable has been tested and used internally before any public release.
 
 ## Reviewer routing (author's judgment — no automated routing)
-<!-- Required if item 4 or 5 above is checked: name who reviewed it (SME / R&E / regulation team) and how their sign-off was captured (link to Slack thread / email / doc). Write your answer inside the quote block below — text outside it is ignored by the automated check. -->
+<!-- Required if item 3 above is checked: name who reviewed it (SME / R&E / regulation team) and how their sign-off was captured (link to Slack thread / email / doc). Write your answer inside the quote block below — text outside it is ignored by the automated check. -->
 > 
